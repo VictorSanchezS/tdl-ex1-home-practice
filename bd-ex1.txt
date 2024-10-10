@@ -1,0 +1,36 @@
+-- Create the database
+CREATE DATABASE tdlp_ex1;
+
+-- Use the database
+USE tdlp_ex1;
+
+-- Create Categories table
+CREATE TABLE Categories (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Name VARCHAR(100) NOT NULL,
+    Description VARCHAR(255) NULL
+);
+
+-- Create Products table
+CREATE TABLE Products (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Name VARCHAR(100) NOT NULL,
+    Description VARCHAR(255) NULL,
+    Price DECIMAL(10, 2) NOT NULL CHECK (Price >= 0),
+    CreationDate DATETIME DEFAULT GETDATE(),
+    Status BIT NOT NULL, -- 1 for active, 0 for inactive
+    CategoryId INT,
+    FOREIGN KEY (CategoryId) REFERENCES Categories(Id)
+);
+
+USE tdlp_ex1;
+
+INSERT INTO Categories (Name, Description) VALUES 
+('Electronics', 'Electronic products such as phones, computers, and accessories.'),
+('Clothing', 'Clothing items for men, women, and children.'),
+('Home', 'Home items, furniture, and decor.'),
+('Toys', 'Toys for children of all ages.'),
+('Sports', 'Sports equipment and accessories.');
+
+INSERT INTO Products (Name, Description, Price, Status, CategoryId) 
+VALUES ('Smartphone', 'Latest model smartphone with advanced features.', 699.99, 1, (SELECT Id FROM Categories WHERE Name = 'Electronics'));
